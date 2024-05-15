@@ -1,52 +1,34 @@
-import { useState, useEffect } from 'react'
+import { BrowserRouter, NavLink, Routes, Route } from 'react-router-dom';
+import { HomePage, FilmsPage, SingleFilmPage } from './pages/index.js';
 import './App.css'
 
 function App() {
-  const [films, setFilms] = useState([]);
   
-  useEffect(() => {
-
-    fetch('https://studioghibliapi-d6fc8.web.app/films')
-    .then((response) => {
-      
-      return response.json();
-    })
-    .then((data) => {
-      
-      setFilms(data);
-    })
-    .catch((err) => {
-      
-      console.error(err);
-    })
-  }, [])
 
   return (
     <>
-      
-      <h1>Studio Ghibli Films</h1>
-      <p>Created By: David Michael</p>
-      <ul>
-
-        {films.map((film) => {
-            
-          return (
-            <li key={film.id}>
-              <div className="movie-left">
-                <h2>{film.title}</h2>
-                <img src={film.image} alt={`${film.title} banner`} />
-              </div>
-
-              <div className="movie-right">
-                <p>{film.description}</p>
-                <p>{film.running_time}m - Rotten Tomatoes: {film.rt_score}%</p>
-              </div>
+      <BrowserRouter>
+        <nav>
+          <ul>
+            <li>
+              <NavLink to="/">Home</NavLink>
             </li>
-          );
-        })}
-      </ul>
+
+            <li>
+              <NavLink to="/films">Films</NavLink>
+            </li>
+           
+          </ul>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/films" element={<FilmsPage />} />
+          <Route path="/film/:id" element={<SingleFilmPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
 export default App
